@@ -1,17 +1,20 @@
 const character = {
     name: 'Pikachu',
-    defaultHP: 100,
-    HP: 100,
+    defaultHP: 150,
+    HP: 150,
     elHPLabel: document.getElementById('health-character'),
     elHPBar: document.getElementById('progressbar-character'),
+    makeHit: makeHit
+
 }
 
 const enemy = {
     name: 'Charmander',
-    defaultHP: 100,
-    HP: 100,
+    defaultHP: 150,
+    HP: 150,
     elHPLabel: document.getElementById('health-enemy'),
     elHPBar: document.getElementById('progressbar-enemy'),
+    makeHit: makeHit
 }
 
 const actions = [
@@ -27,27 +30,33 @@ const actions = [
 
 
 function renderHP(person) {
-    renderHPLife(person);
-    renderProgressBar(person);
+    renderHPLabel(person);
+    renderHPBar(person);
 }
 
-function renderHPLife(person) {
+function renderHPLabel(person) {
     person.elHPLabel.innerText = person.HP + '/' + person.defaultHP;
 }
 
-function renderProgressBar(person) {
-    person.elHPBar.style.width = person.HP + '%';
+function renderHPBar(person) {
+    person.elHPBar.style.width = (person.HP * 100) / person.defaultHP  + '%';
 }
 
-function changeHP(count, person) {
-    if (count > person.HP) {
-        person.HP = 0;
-        alert('Бедный ' + person.name + ' проиграл бой!');
+function makeHit(count) {
+    if (count > (this.HP * 100) / this.defaultHP) {
+        this.HP = 0;
+        console.log(this.HP)
+        renderHP(this);
+        console.log('Last kick:' + count);
+
+        alert('Бедный ' + this.name + ' проиграл бой!');
         disableALlButtons(actions);
     } else {
-        person.HP -= count;
+        console.log(count)
+        this.HP -= Math.ceil((this.defaultHP / 100) * count);
+        renderHP(this);
+
     }
-    renderHP(person);
 }
 
 function random(num) {
@@ -58,8 +67,8 @@ function setupHitButtons(settings) {
     for (let i = 0; i < settings.length; i++) {
         settings[i].elButton.addEventListener('click', function () {
             console.log('Kick');
-            changeHP(random(settings[i].damageMultiplier), character);
-            changeHP(random(settings[i].damageMultiplier), enemy);
+            character.makeHit(random(settings[i].damageMultiplier))
+            enemy.makeHit(random(settings[i].damageMultiplier))
         });
     }
 }
