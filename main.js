@@ -25,7 +25,7 @@ const enemy = {
 
 const actions = [
     {
-        name: 'Айскик',
+        name: 'Thunder Jolt',
         elButton: document.getElementById('btn-kick'),
         damageMultiplier: 20,
         counter: 0,
@@ -34,7 +34,7 @@ const actions = [
         limit: 7
     },
     {
-        name: 'Фаербол',
+        name: 'Fireball',
         elButton: document.getElementById('btn-kick-spec'),
         damageMultiplier: 30,
         counter: 0,
@@ -58,9 +58,7 @@ function renderHPBar() {
     this.elHPBar.style.width = (this.HP * 100) / this.defaultHP + '%';
 }
 
-function random(num) {
-    return Math.ceil(Math.random() * num);
-}
+const random = (num) => Math.ceil(Math.random() * num);
 
 function increaseCounter() {
     let actionCounter = this.counter;
@@ -79,14 +77,17 @@ function makeActionLog() {
         consoleLog.innerText = `Больше нельзя применить этот навык`;
         consoleBar.insertBefore(consoleLog, consoleBar.children[0]);
     }
-
 }
 
+const renderActionLimits = (button) => {
+    button.elButton.innerText = `${button.name} (${button.limit - button.counter})`;
+};
 
 function setupHitButtons(buttons) {
     for (let i = 0; i < buttons.length; i++) {
 
         const actionCount = buttons[i].increaseCounter();
+        renderActionLimits(buttons[i]);
 
         buttons[i].elButton.addEventListener('click', function () {
             console.log('Kick');
@@ -96,6 +97,7 @@ function setupHitButtons(buttons) {
             if (buttons[i].counter <= buttons[i].limit) {
                 character.getDamage(random(buttons[i].damageMultiplier));
                 enemy.getDamage(random(buttons[i].damageMultiplier));
+                renderActionLimits(buttons[i]);
                 buttons[i].makeActionLog();
             } else {
                 buttons[i].elButton.disabled = true;
@@ -105,11 +107,11 @@ function setupHitButtons(buttons) {
     }
 }
 
-function disableALlButtons(buttons) {
+const disableALlButtons = (buttons) => {
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].elButton.disabled = true;
     }
-}
+};
 
 function generateHitLog(firstPerson, secondPerson, damage) {
     const logs = [
@@ -170,6 +172,7 @@ function createConsole() {
     const playGround = document.querySelector('html');
     playGround.appendChild(consoleBlock).setAttribute('id', 'logs');
 }
+
 
 function init() {
     console.log('Start Game!');
