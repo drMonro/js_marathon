@@ -29,7 +29,7 @@ const actions = [
         elButton: document.getElementById('btn-kick'),
         damageMultiplier: 20,
         counter: 0,
-        increaseCounter,
+        // increaseCounter,
         makeActionLog,
         limit: 7
     },
@@ -38,7 +38,7 @@ const actions = [
         elButton: document.getElementById('btn-kick-spec'),
         damageMultiplier: 30,
         counter: 0,
-        increaseCounter,
+        // increaseCounter,
         makeActionLog,
         limit: 3
     }
@@ -60,12 +60,12 @@ function renderHPBar() {
 
 const random = (num) => Math.ceil(Math.random() * num);
 
-function increaseCounter() {
-    let actionCounter = this.counter;
-    return function () {
-        return ++actionCounter
-    }
-}
+// function increaseCounter() {
+//     let actionCounter = this.counter;
+//     return function () {
+//         return ++actionCounter
+//     }
+// }
 
 function makeActionLog() {
     const consoleBar = document.getElementById('logs');
@@ -86,13 +86,14 @@ const renderActionLimits = (button) => {
 function setupHitButtons(buttons) {
     for (let i = 0; i < buttons.length; i++) {
 
-        const actionCount = buttons[i].increaseCounter();
+        // const actionCount = buttons[i].increaseCounter();
         renderActionLimits(buttons[i]);
 
         buttons[i].elButton.addEventListener('click', function () {
             console.log('Kick');
             console.log(`Counter call`);
-            buttons[i].counter = actionCount();
+            // buttons[i].counter = actionCount();
+            buttons[i].counter += 1;
 
             if (buttons[i].counter <= buttons[i].limit) {
                 character.getDamage(random(buttons[i].damageMultiplier));
