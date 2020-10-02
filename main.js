@@ -93,7 +93,7 @@ function setupHitButtons(buttons) {
             console.log('Kick');
             console.log(`Counter call`);
             // buttons[i].counter = actionCount();
-            buttons[i].counter += 1;
+            ++buttons[i].counter;
 
             if (buttons[i].counter <= buttons[i].limit) {
                 character.getDamage(random(buttons[i].damageMultiplier));
