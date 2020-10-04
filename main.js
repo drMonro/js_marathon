@@ -74,6 +74,7 @@ const renderActionLimits = (button, counter) => {
 
 function makeAction (action) {
     let actionCounter = 0;
+    renderActionLimits(action, actionCounter);
 
     return function () {
         if (actionCounter < action.limit) {
