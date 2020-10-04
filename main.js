@@ -28,8 +28,6 @@ const actions = [
         name: 'Thunder Jolt',
         elButton: document.getElementById('btn-kick'),
         damageMultiplier: 20,
-        counter: 0,
-        // increaseCounter,
         makeActionLog,
         limit: 7
     },
@@ -37,8 +35,6 @@ const actions = [
         name: 'Fireball',
         elButton: document.getElementById('btn-kick-spec'),
         damageMultiplier: 30,
-        counter: 0,
-        // increaseCounter,
         makeActionLog,
         limit: 3
     }
@@ -60,18 +56,11 @@ function renderHPBar() {
 
 const random = (num) => Math.ceil(Math.random() * num);
 
-// function increaseCounter() {
-//     let actionCounter = this.counter;
-//     return function () {
-//         return ++actionCounter
-//     }
-// }
-
-function makeActionLog() {
+function makeActionLog(counter) {
     const consoleBar = document.getElementById('logs');
     const consoleLog = document.createElement('p');
-    if (this.counter <= this.limit) {
-        consoleLog.innerText = `Колличество применений навыка "${this.name}" : ${this.counter}. Осталось: ${this.limit - this.counter}`;
+    if (counter < this.limit) {
+        consoleLog.innerText = `Колличество применений навыка "${this.name}" : ${counter}. Осталось: ${this.limit - counter}`;
         consoleBar.insertBefore(consoleLog, consoleBar.children[0]);
     } else {
         consoleLog.innerText = `Больше нельзя применить этот навык`;
@@ -79,31 +68,35 @@ function makeActionLog() {
     }
 }
 
-const renderActionLimits = (button) => {
-    button.elButton.innerText = `${button.name} (${button.limit - button.counter})`;
+const renderActionLimits = (button, counter) => {
+    button.elButton.innerText = `${button.name} (${button.limit - counter})`;
 };
+
+function makeAction (action) {
+    let actionCounter = 0;
+
+    return function () {
+        if (actionCounter < action.limit) {
+            character.getDamage(random(action.damageMultiplier));
+            enemy.getDamage(random(action.damageMultiplier));
+            ++actionCounter;
+            action.makeActionLog(actionCounter);
+            renderActionLimits(action, actionCounter);
+        } else {
+            action.elButton.disabled = true;
+            action.makeActionLog(actionCounter);
+        }
+
+    }
+}
 
 function setupHitButtons(buttons) {
     for (let i = 0; i < buttons.length; i++) {
-
-        // const actionCount = buttons[i].increaseCounter();
-        renderActionLimits(buttons[i]);
+        const strikeOut = makeAction(buttons[i]);
 
         buttons[i].elButton.addEventListener('click', function () {
             console.log('Kick');
-            console.log(`Counter call`);
-            // buttons[i].counter = actionCount();
-            ++buttons[i].counter;
-
-            if (buttons[i].counter <= buttons[i].limit) {
-                character.getDamage(random(buttons[i].damageMultiplier));
-                enemy.getDamage(random(buttons[i].damageMultiplier));
-                renderActionLimits(buttons[i]);
-                buttons[i].makeActionLog();
-            } else {
-                buttons[i].elButton.disabled = true;
-                buttons[i].makeActionLog();
-            }
+            strikeOut();
         });
     }
 }
