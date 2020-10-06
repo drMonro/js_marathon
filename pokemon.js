@@ -1,7 +1,5 @@
-// import Actions from "./actions.js";
 import {actions} from "./main.js"
 import {player1, player2} from "./main.js"
-
 
 class Selectors {
     constructor(name) {
