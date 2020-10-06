@@ -18,14 +18,12 @@ const actions = [
         name: 'Thunder Jolt',
         elButton: document.getElementById('btn-kick'),
         damageMultiplier: 20,
-        // makeActionLog,
         limit: 7
     },
     {
         name: 'Fireball',
         elButton: document.getElementById('btn-kick-spec'),
         damageMultiplier: 30,
-        // makeActionLog,
         limit: 3
     }
 ]
