@@ -17,7 +17,7 @@ class Actions {
         }
     };
 
-    randomCell = (num) => Math.ceil(Math.random() * num);
+    random = (num) => Math.ceil(Math.random() * num);
 
     makeActionLog(counter, action) {
         const consoleBar = document.getElementById('logs');
@@ -43,8 +43,8 @@ class Actions {
         return function () {
             if (actionCounter < action.limit) {
                 console.log('Kick');
-                player1.getDamage(This.randomCell(action.damageMultiplier));
-                player2.getDamage(This.randomCell(action.damageMultiplier));
+                player1.getDamage(This.random(action.damageMultiplier));
+                player2.getDamage(This.random(action.damageMultiplier));
                 ++actionCounter;
                 This.makeActionLog(actionCounter, action);
                 This.renderActionLimits(action, actionCounter);
