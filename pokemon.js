@@ -1,5 +1,5 @@
 // import {actions} from "./main.js"
-// import {player1, player2} from "./main.js"
+import {player1, player2} from "./main.js"
 
 class Selectors {
     constructor(name) {
@@ -16,7 +16,7 @@ class Pokemon extends Selectors {
 
         // console.log(this.name)
         this.img = img;
-        console.log(this.img)
+        // console.log(this.img)
 
         this.hp = {
             current: hp,
