@@ -3,7 +3,7 @@ import {player1, player2} from "./main.js"
 class Actions {
     constructor({attacks1, attacks2}) {
         this.attacks1 = attacks1;
-        this.attacks2 = attacks2;
+        this.attacks2 = attacks2[0];
         this.setupHitButtons(this.attacks1, this.attacks2);
         this.createConsole();
     };
@@ -15,7 +15,7 @@ class Actions {
             const buttonElement = document.createElement('button');
             buttonElement.classList.add('button');
             buttonElement.innerText = attack.name;
-            const strikeOut = this.makeAction(attack, buttonElement, attacks2[0]);
+            const strikeOut = this.makeAction(attack, buttonElement, attacks2);
 
             buttonElement.addEventListener('click', () => {
                 console.log('click');
@@ -30,6 +30,7 @@ class Actions {
     makeActionLog(counter, action) {
         const consoleBar = document.getElementById('logs');
         const consoleLog = document.createElement('p');
+
         if (counter < action.maxCount) {
             consoleLog.innerText = `Колличество применений навыка "${action.name}" : ${counter}. Осталось: ${action.maxCount - counter}`;
             consoleBar.insertBefore(consoleLog, consoleBar.children[0]);
@@ -50,15 +51,15 @@ class Actions {
 
         return function () {
             if (actionCounter < action.maxCount) {
-                console.log('Kick');
-                player1.getDamage(This.random(action.damageMultiplier));
-                player2.getDamage(This.random(action2.damageMultiplier));
+                console.log(action.damageMultiplier);
+                player2.getDamage(This.random(action.damageMultiplier));
+                player1.getDamage(This.random(action2.damageMultiplier));
                 ++actionCounter;
                 This.makeActionLog(actionCounter, action);
                 This.renderActionLimits(button, action, actionCounter);
             } else {
                 button.disabled = true;
-                This.makeActionLog(actionCounter, action);
+                // This.makeActionLog(actionCounter, action);
             }
         }
     };
