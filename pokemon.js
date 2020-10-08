@@ -1,5 +1,7 @@
 // import {actions} from "./main.js"
-import {player1, player2} from "./main.js"
+// import {player1, player2, start} from "./main.js"
+import {player1, player2, winEnemy} from "./game.js";
+
 
 class Selectors {
     constructor(name) {
@@ -45,7 +47,7 @@ class Pokemon extends Selectors {
     disableALlActions = () => {
         const actions = document.querySelector('.control').querySelectorAll('button');
         actions.forEach(action => {
-            action.disabled = true;
+            action.remove();
 
         })
     };
@@ -53,22 +55,29 @@ class Pokemon extends Selectors {
     getDamage = (count) => {
         const damageCount = Math.ceil((this.hp.total / 100) * count);
 
-        this.hp.current -= damageCount;
 
         if (count > (this.hp.current * 100) / this.hp.total) {
-            this.hp.current = 0;
+            // this.hp.current = 0;
             this.disableALlActions();
             alert(`Персонаж ${this.name} проиграл!`);
-            // gameReset();
-        }
-
-        if (this.name === player1.name) {
-            this.makeHItLog(player1, player2, damageCount);
+            // start();
+            new winEnemy();
+            // console.log(player1);
         } else {
-            this.makeHItLog(player2, player1, damageCount);
+            if (this.name === player1.name) {
+                this.makeHItLog(player1, player2, damageCount);
+            } else {
+                this.makeHItLog(player2, player1, damageCount);
+            }
+            this.hp.current -= damageCount;
+
+
+            this.renderHP();
+
         }
 
-        this.renderHP();
+
+
     };
 
     makeHItLog = (target, person, damage) => {

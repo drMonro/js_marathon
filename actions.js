@@ -1,5 +1,6 @@
 // import {startGame} from "./main.js"
-import {player1, player2} from "./main.js"
+// import {player1, player2} from "./main.js"
+import {player1, player2} from "./game.js";
 
 class Actions {
     constructor({attacks1, attacks2 = []}) {
