@@ -36,10 +36,12 @@ class Pokemon extends Selectors {
         this.elHPBar.style.width = (this.hp.current * 100) / this.hp.total + '%';
     };
 
-    disableALlButtons = (buttons) => {
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].elButton.disabled = true;
-        }
+    disableALlActions = () => {
+        const actions = document.querySelector('.control').querySelectorAll('button');
+        actions.forEach(action => {
+            action.disabled = true;
+
+        })
     };
 
     getDamage = (count) => {
@@ -49,7 +51,7 @@ class Pokemon extends Selectors {
 
         if (count > (this.hp.current * 100) / this.hp.total) {
             this.hp.current = 0;
-            // this.disableALlButtons(actions)
+            this.disableALlActions();
         }
 
         if (this.name === player1.name) {
@@ -70,11 +72,9 @@ class Pokemon extends Selectors {
 
     random = (num) => Math.ceil(Math.random() * num);
 
-
-
     generateHitLog = (firstPerson, secondPerson, damage) => {
         const logs = [
-            `${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`, // -12, [88/100]
+            `${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`,
             `${firstPerson.name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`,
             `${firstPerson.name} забылся, но в это время наглый ${secondPerson.name}, приняв волевое решение, неслышно подойдя сзади, ударил. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`,
             `${firstPerson.name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`,
@@ -85,8 +85,6 @@ class Pokemon extends Selectors {
             `${firstPerson.name} расстроился, как вдруг, неожиданно ${secondPerson.name} случайно влепил стопой в живот соперника. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`,
             `${firstPerson.name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`
         ];
-        // console.log(`${Math.random() * 5}`);
-        // console.log(Math.random() * 4);
         return logs[this.random(logs.length - 1)];
     }
 }
