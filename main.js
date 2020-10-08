@@ -1,16 +1,21 @@
 import Pokemon from "./pokemon.js";
 import Actions from "./actions.js";
+import { pokemons } from "./pokemons.js";
+
+const pikachu = pokemons.find(item => item.name === 'Pikachu');
+const charmander = pokemons.find(item => item.name === 'Charmander');
 
 const player1 = new Pokemon({
-    name: 'Pikachu',
-    hp: 150,
-    selectors: 'character'
+    ...pikachu,
+    selectors: 'player1'
 })
 
+
 const player2 = new Pokemon({
-    name: 'Charmander',
-    hp: 200,
-    selectors: 'enemy'
+    ...charmander,
+    // name: 'Charmander',
+    // hp: 200,
+    selectors: 'player2'
 })
 
 const actions = [
@@ -28,7 +33,11 @@ const actions = [
     }
 ]
 
-const adjustButtons = new Actions({actions})
+const attacks = player1.attacks;
+// console.log(attacks);
+
+// const adjustButtons = new Actions({actions})
+const adjustButtons = new Actions({attacks})
 
 export {player1, player2, actions};
 

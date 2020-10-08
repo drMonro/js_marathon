@@ -1,4 +1,4 @@
-import {actions} from "./main.js"
+// import {actions} from "./main.js"
 import {player1, player2} from "./main.js"
 
 class Selectors {
@@ -9,7 +9,7 @@ class Selectors {
 }
 
 class Pokemon extends Selectors {
-    constructor({name, hp, selectors}) {
+    constructor({name, hp, selectors, attacks = []}) {
         super(selectors);
 
         this.name = name;
@@ -17,6 +17,8 @@ class Pokemon extends Selectors {
             current: hp,
             total: hp
         };
+
+        this.attacks = attacks;
 
         this.renderHP();
     }
@@ -47,7 +49,7 @@ class Pokemon extends Selectors {
 
         if (count > (this.hp.current * 100) / this.hp.total) {
             this.hp.current = 0;
-            this.disableALlButtons(actions)
+            // this.disableALlButtons(actions)
         }
 
         if (this.name === player1.name) {
@@ -83,6 +85,8 @@ class Pokemon extends Selectors {
             `${firstPerson.name} расстроился, как вдруг, неожиданно ${secondPerson.name} случайно влепил стопой в живот соперника. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`,
             `${firstPerson.name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику. -${damage}, [${firstPerson.hp.current}/${firstPerson.hp.current}]`
         ];
+        // console.log(`${Math.random() * 5}`);
+        // console.log(Math.random() * 4);
         return logs[this.random(logs.length - 1)];
     }
 }

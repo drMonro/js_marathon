@@ -1,20 +1,27 @@
 import {player1, player2} from "./main.js"
 
 class Actions {
-    constructor({actions}) {
-        this.actions = actions;
-        this.setupHitButtons(this.actions);
+    constructor({attacks}) {
+        this.attacks = attacks;
+        this.setupHitButtons(this.attacks);
         this.createConsole();
     };
 
-    setupHitButtons = (actions) => {
-        for (let i = 0; i < actions.length; i++) {
-            const strikeOut = this.makeAction(actions[i]);
+    setupHitButtons = (attacks) => {
+        const controlBar = document.querySelector('.control');
 
-            actions[i].elButton.addEventListener('click', function () {
+        attacks.forEach(attack => {
+            const buttonElement = document.createElement('button');
+            buttonElement.classList.add('button');
+            buttonElement.innerText = attack.name;
+            const strikeOut = this.makeAction(attack, buttonElement);
+
+            buttonElement.addEventListener('click', () => {
+                console.log('click');
                 strikeOut();
-            });
-        }
+            })
+            controlBar.appendChild(buttonElement);
+        });
     };
 
     random = (num) => Math.ceil(Math.random() * num);
@@ -22,8 +29,8 @@ class Actions {
     makeActionLog(counter, action) {
         const consoleBar = document.getElementById('logs');
         const consoleLog = document.createElement('p');
-        if (counter < action.limit) {
-            consoleLog.innerText = `Колличество применений навыка "${action.name}" : ${counter}. Осталось: ${action.limit - counter}`;
+        if (counter < action.maxCount) {
+            consoleLog.innerText = `Колличество применений навыка "${action.name}" : ${counter}. Осталось: ${action.maxCount - counter}`;
             consoleBar.insertBefore(consoleLog, consoleBar.children[0]);
         } else {
             consoleLog.innerText = `Больше нельзя применить этот навык`;
@@ -31,25 +38,25 @@ class Actions {
         }
     };
 
-    renderActionLimits = (button, counter) => {
-        button.elButton.innerText = `${button.name} (${button.limit - counter})`;
+    renderActionLimits = (button, action, counter) => {
+        button.innerText = `${action.name} (${action.maxCount - counter})`;
     };
 
-    makeAction = (action) => {
+    makeAction = (action, button) => {
         let actionCounter = 0;
         let This = this;
-        This.renderActionLimits(action, actionCounter);
+        This.renderActionLimits(button, action, actionCounter);
 
         return function () {
-            if (actionCounter < action.limit) {
+            if (actionCounter < action.maxCount) {
                 console.log('Kick');
                 player1.getDamage(This.random(action.damageMultiplier));
                 player2.getDamage(This.random(action.damageMultiplier));
                 ++actionCounter;
                 This.makeActionLog(actionCounter, action);
-                This.renderActionLimits(action, actionCounter);
+                This.renderActionLimits(button, action, actionCounter);
             } else {
-                action.elButton.disabled = true;
+                button.disabled = true;
                 This.makeActionLog(actionCounter, action);
             }
         }
