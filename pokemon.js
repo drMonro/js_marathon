@@ -1,5 +1,5 @@
 // import {actions} from "./main.js"
-import {player1, player2} from "./main.js"
+// import {player1, player2} from "./main.js"
 
 class Selectors {
     constructor(name) {
@@ -9,10 +9,15 @@ class Selectors {
 }
 
 class Pokemon extends Selectors {
-    constructor({name, hp, selectors, attacks = []}) {
+    constructor({name, hp, selectors, attacks, img = []}) {
         super(selectors);
 
         this.name = name;
+
+        // console.log(this.name)
+        this.img = img;
+        console.log(this.img)
+
         this.hp = {
             current: hp,
             total: hp
@@ -22,6 +27,7 @@ class Pokemon extends Selectors {
 
         this.renderHP();
     }
+
 
     renderHP = () => {
         this.renderHPLabel();
@@ -52,6 +58,8 @@ class Pokemon extends Selectors {
         if (count > (this.hp.current * 100) / this.hp.total) {
             this.hp.current = 0;
             this.disableALlActions();
+            alert(`Персонаж ${this.name} проиграл!`);
+            // gameReset();
         }
 
         if (this.name === player1.name) {
