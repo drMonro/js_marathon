@@ -18,26 +18,27 @@ const player2 = new Pokemon({
     selectors: 'player2'
 })
 
-const actions = [
-    {
-        name: 'Thunder Jolt',
-        elButton: document.getElementById('btn-kick'),
-        damageMultiplier: 20,
-        limit: 7
-    },
-    {
-        name: 'Fireball',
-        elButton: document.getElementById('btn-kick-spec'),
-        damageMultiplier: 30,
-        limit: 3
-    }
-]
+// const actions = [
+//     {
+//         name: 'Thunder Jolt',
+//         elButton: document.getElementById('btn-kick'),
+//         damageMultiplier: 20,
+//         limit: 7
+//     },
+//     {
+//         name: 'Fireball',
+//         elButton: document.getElementById('btn-kick-spec'),
+//         damageMultiplier: 30,
+//         limit: 3
+//     }
+// ]
 
-const attacks = player1.attacks;
+const attacks1 = player1.attacks;
+const attacks2 = player2.attacks;
 // console.log(attacks);
 
 // const adjustButtons = new Actions({actions})
-const adjustButtons = new Actions({attacks})
+const adjustButtons = new Actions({attacks1, attacks2})
 
-export {player1, player2, actions};
+export {player1, player2};
 

@@ -1,20 +1,21 @@
 import {player1, player2} from "./main.js"
 
 class Actions {
-    constructor({attacks}) {
-        this.attacks = attacks;
-        this.setupHitButtons(this.attacks);
+    constructor({attacks1, attacks2}) {
+        this.attacks1 = attacks1;
+        this.attacks2 = attacks2;
+        this.setupHitButtons(this.attacks1, this.attacks2);
         this.createConsole();
     };
 
-    setupHitButtons = (attacks) => {
+    setupHitButtons = (attacks1, attacks2) => {
         const controlBar = document.querySelector('.control');
 
-        attacks.forEach(attack => {
+        attacks1.forEach(attack => {
             const buttonElement = document.createElement('button');
             buttonElement.classList.add('button');
             buttonElement.innerText = attack.name;
-            const strikeOut = this.makeAction(attack, buttonElement);
+            const strikeOut = this.makeAction(attack, buttonElement, attacks2[0]);
 
             buttonElement.addEventListener('click', () => {
                 console.log('click');
@@ -42,7 +43,7 @@ class Actions {
         button.innerText = `${action.name} (${action.maxCount - counter})`;
     };
 
-    makeAction = (action, button) => {
+    makeAction = (action, button, action2) => {
         let actionCounter = 0;
         let This = this;
         This.renderActionLimits(button, action, actionCounter);
@@ -51,7 +52,7 @@ class Actions {
             if (actionCounter < action.maxCount) {
                 console.log('Kick');
                 player1.getDamage(This.random(action.damageMultiplier));
-                player2.getDamage(This.random(action.damageMultiplier));
+                player2.getDamage(This.random(action2.damageMultiplier));
                 ++actionCounter;
                 This.makeActionLog(actionCounter, action);
                 This.renderActionLimits(button, action, actionCounter);
