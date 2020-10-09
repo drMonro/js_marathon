@@ -60,11 +60,12 @@ class Pokemon extends Selectors {
         if (count > (this.hp.current * 100) / this.hp.total) {
             // this.hp.current = 0;
             this.disableALlActions();
-            // alert(`Персонаж ${this.name} проиграл!`);
+            alert(`Персонаж ${this.name} проиграл!`);
             // start();
             new winEnemy();
+            return
             // console.log(player1);
-            this.renderHP();
+            // this.renderHP();
 
         } else {
             if (this.name === player1.name) {

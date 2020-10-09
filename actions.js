@@ -55,9 +55,9 @@ class Actions {
 
         return function () {
             if (actionCounter < action.maxCount) {
-                player1.getDamage(This.random(action.damageMultiplier));
+                player2.getDamage(This.random(action.damageMultiplier));
                 console.log(player1)
-                player2.getDamage(This.random(action2.damageMultiplier));
+                player1.getDamage(This.random(action2.damageMultiplier));
                 ++actionCounter;
                 This.makeActionLog(actionCounter, action);
                 This.renderActionLimits(button, action, actionCounter);
