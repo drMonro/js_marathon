@@ -60,15 +60,17 @@ class Pokemon extends Selectors {
 
 
         if (count > (this.hp.current * 100) / this.hp.total) {
+            this.disableALlActions();
 
             if (this.selectors === player1.selectors){
                 alert(`Вы проиграли! Начнёте снова?`);
+
                 new startGame();
             } else {
                 alert(`Вы выиграли! Продолжите бой?`);
                 new winGame();
+
             }
-            this.disableALlActions();
 
 
 
