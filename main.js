@@ -1,5 +1,6 @@
-import {startGame} from "./game.js";
+import {Game} from "./game.js";
 
+let newGame = new Game();
 
+newGame.startGame();
 
-new startGame();
