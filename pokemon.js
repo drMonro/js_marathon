@@ -26,6 +26,7 @@ class Pokemon extends Selectors {
         };
 
         this.attacks = attacks;
+        console.log(hp);
 
         this.renderHP();
     }
@@ -59,10 +60,12 @@ class Pokemon extends Selectors {
         if (count > (this.hp.current * 100) / this.hp.total) {
             // this.hp.current = 0;
             this.disableALlActions();
-            alert(`Персонаж ${this.name} проиграл!`);
+            // alert(`Персонаж ${this.name} проиграл!`);
             // start();
             new winEnemy();
             // console.log(player1);
+            this.renderHP();
+
         } else {
             if (this.name === player1.name) {
                 this.makeHItLog(player1, player2, damageCount);

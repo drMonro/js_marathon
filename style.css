@@ -40,9 +40,9 @@ body {
     position: relative;
     margin: 20px;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .playground {
@@ -50,6 +50,15 @@ body {
     display: flex;
     justify-content: space-around;
     margin: 30px auto;
+}
+
+#logs {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background-color: #ffffff;
+    max-height: 40%;
 }
 
 .arrow {
