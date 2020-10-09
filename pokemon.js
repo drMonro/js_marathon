@@ -1,6 +1,6 @@
 // import {actions} from "./main.js"
 // import {player1, player2, start} from "./main.js"
-import {player1, player2, startGame} from "./game.js";
+import {player1, player2, startGame, winGame} from "./game.js";
 
 
 class Selectors {
@@ -62,21 +62,18 @@ class Pokemon extends Selectors {
         if (count > (this.hp.current * 100) / this.hp.total) {
 
             if (this.selectors === player1.selectors){
-                this.disableALlActions();
                 alert(`Вы проиграли! Начнёте снова?`);
                 new startGame();
             } else {
-                alert(`Вы выиграли! Продолжите?`);
-
+                alert(`Вы выиграли! Продолжите бой?`);
+                new winGame();
             }
-            // this.hp.current = 0;
-            // this.disableALlActions();
-            // start();
-            // console.log(player1);
-            // this.renderHP();
+            this.disableALlActions();
+
+
 
         } else {
-            if (this.name === player1.name) {
+            if (this.selectors === player1.selectors) {
                 this.makeHItLog(player1, player2, damageCount);
             } else {
                 this.makeHItLog(player2, player1, damageCount);
