@@ -6,10 +6,26 @@ import Actions from "./actions.js";
 let player1
 let player2
 
+let generateRandomPokemon = () => pokemons[random(pokemons.length - 1)];
+
+let renderNames = (player, enemy) => {
+    let playerName = document.querySelector('#name-player1');
+    let enemyName = document.querySelector('#name-player2');
+    playerName.innerText = player.name;
+    enemyName.innerText = enemy.name;
+};
+
+let renderAvatars = (player, enemy) => {
+    let playerImage = document.querySelector('.player1').querySelector('img');
+    let enemyImage = document.querySelector('.player2').querySelector('img');
+    playerImage.src = player.img;
+    enemyImage.src = enemy.img;
+};
+
 class startGame {
     constructor() {
-        let char = this.generateRandomPokemon();
-        let char2 = this.generateRandomPokemon();
+        let char = generateRandomPokemon();
+        let char2 = generateRandomPokemon();
 
 
         let character = new Pokemon({
@@ -26,39 +42,20 @@ class startGame {
         player2 = enemy;
 
 
-        this.renderNames(player1, player2);
-        this.renderAvatars(player1, player2);
+        renderNames(player1, player2);
+        renderAvatars(player1, player2);
 
         let attacks1 = player1.attacks;
         let attacks2 = player2.attacks;
 
         let adjustButtons = new Actions({attacks1, attacks2});
     };
-
-    generateRandomPokemon = () => pokemons[random(pokemons.length - 1)];
-
-
-
-
-    renderNames = (player, enemy) => {
-        let playerName = document.querySelector('#name-player1');
-        let enemyName = document.querySelector('#name-player2');
-        playerName.innerText = player.name;
-        enemyName.innerText = enemy.name;
-    };
-
-    renderAvatars = (player, enemy) => {
-        let playerImage = document.querySelector('.player1').querySelector('img');
-        let enemyImage = document.querySelector('.player2').querySelector('img');
-        playerImage.src = player.img;
-        enemyImage.src = enemy.img;
-    };
 }
 
 
 class winGame {
     constructor() {
-        let char2 = this.generateRandomPokemon();
+        let char2 = generateRandomPokemon();
         let enemy = new Pokemon({
             ...char2,
             selectors: 'player2'
@@ -67,8 +64,8 @@ class winGame {
         player2 = enemy;
 
 
-        this.renderNames(player1, player2);
-        this.renderAvatars(player1, player2);
+        renderNames(player1, player2);
+        renderAvatars(player1, player2);
 
         let attacks1 = player1.attacks;
         let attacks2 = player2.attacks;
@@ -76,24 +73,6 @@ class winGame {
         let adjustButtons = new Actions({attacks1, attacks2});
     };
 
-    generateRandomPokemon = () => pokemons[random(pokemons.length - 1)];
-
-
-
-
-    renderNames = (player, enemy) => {
-        let playerName = document.querySelector('#name-player1');
-        let enemyName = document.querySelector('#name-player2');
-        playerName.innerText = player.name;
-        enemyName.innerText = enemy.name;
-    };
-
-    renderAvatars = (player, enemy) => {
-        let playerImage = document.querySelector('.player1').querySelector('img');
-        let enemyImage = document.querySelector('.player2').querySelector('img');
-        playerImage.src = player.img;
-        enemyImage.src = enemy.img;
-    };
 }
 
 export {startGame, winGame, player1, player2};
