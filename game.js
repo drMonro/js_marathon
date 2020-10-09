@@ -3,9 +3,6 @@ import Pokemon from "./pokemon.js";
 import random from "./utils.js";
 
 class Game {
-    constructor() {
-    };
-
     generateRandomPokemon = () => pokemons[random(pokemons.length - 1)];
 
     createConsole = () => {
@@ -13,7 +10,6 @@ class Game {
         const playGround = document.querySelector('html');
         playGround.appendChild(consoleBlock).setAttribute('id', 'logs');
     };
-
 
     renderActionLimits = (button, action, counter) => {
         button.innerText = `${action.name} (${action.maxCount - counter})`;
@@ -49,16 +45,22 @@ class Game {
         let actionCounter = 0;
         let This = this;
         this.renderActionLimits(button, action, actionCounter);
-        // console.log(startGame);
 
         return function () {
             if (actionCounter < action.maxCount) {
-                This.getDamage(This.player2, random(action.damageMultiplier));
-                console.log(This.player1)
-                This.getDamage(This.player1, random(action2.damageMultiplier));
-                ++actionCounter;
-                This.makeActionLog(actionCounter, action);
-                This.renderActionLimits(button, action, actionCounter);
+                if (This.player1.hp.current >= 0) {
+                    This.getDamage(This.player1, random(action2.damageMultiplier));
+
+
+                    if(This.player2.hp.current >= 0){
+                        This.getDamage(This.player2, random(action.damageMultiplier));
+
+                    }
+                    ++actionCounter;
+                    This.makeActionLog(actionCounter, action);
+                    This.renderActionLimits(button, action, actionCounter);
+                }
+
             } else {
                 button.disabled = true;
                 This.makeActionLog(actionCounter, action);
@@ -129,35 +131,6 @@ class Game {
         enemyImage.src = enemy.img;
     };
 
-    startGame = () => {
-        let char = this.generateRandomPokemon();
-        let char2 = this.generateRandomPokemon();
-
-        this.player1 = new Pokemon({
-            ...char,
-            selectors: 'player1'
-        })
-
-        this.player2 = new Pokemon({
-            ...char2,
-            selectors: 'player2'
-        })
-
-        this.attacks1 = this.player1.attacks;
-        this.attacks2 = this.player2.attacks[0];
-
-
-        this.createConsole();
-
-        this.setupHitButtons(this.attacks1, this.attacks2);
-
-        this.renderNames(this.player1, this.player2);
-        this.renderHP(this.player1);
-        this.renderHP(this.player2);
-        this.renderAvatars(this.player1, this.player2);
-
-    };
-
     getDamage = (player, count) => {
         const damageCount = Math.ceil((player.hp.total / 100) * count);
 
@@ -170,9 +143,7 @@ class Game {
                 this.startGame();
             } else {
                 alert(`Вы выиграли! Продолжите бой?`);
-                // new winGame();
-                this.resetGame();
-
+                this.changeEnemy();
             }
 
         } else {
@@ -184,15 +155,51 @@ class Game {
 
             player.hp.current -= damageCount;
             this.renderHP(player);
-
         }
     };
 
+    addCharacter = () => {
+        let character = this.generateRandomPokemon();
+
+        this.player1 = new Pokemon({
+            ...character,
+            selectors: 'player1'
+        })
+        this.attacks1 = this.player1.attacks;
+    }
+
+    addEnemy = () => {
+        let enemy = this.generateRandomPokemon();
+
+        this.player2 = new Pokemon({
+            ...enemy,
+            selectors: 'player2'
+        })
+        this.attacks2 = this.player2.attacks[0];
+    }
+
+    startGame = () => {
+        this.addEnemy();
+        this.addCharacter();
+
+        this.createConsole();
+
+        this.resetGame();
+    };
+
     resetGame = () => {
-        this.startGame();
+        this.setupHitButtons(this.attacks1, this.attacks2);
+        this.renderNames(this.player1, this.player2);
         this.renderHP(this.player1);
         this.renderHP(this.player2);
+        this.renderAvatars(this.player1, this.player2);
     };
+
+    changeEnemy = () => {
+        this.addEnemy();
+        this.resetGame();
+    };
+
 }
 
 export {Game};
