@@ -6,7 +6,7 @@ import Actions from "./actions.js";
 let player1
 let player2
 
-class winEnemy {
+class startGame {
     constructor() {
         let char = this.generateRandomPokemon();
         let char2 = this.generateRandomPokemon();
@@ -55,4 +55,4 @@ class winEnemy {
     };
 }
 
-export {winEnemy, player1, player2};
+export {startGame, player1, player2};

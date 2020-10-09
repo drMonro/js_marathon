@@ -1,6 +1,6 @@
 // import {actions} from "./main.js"
 // import {player1, player2, start} from "./main.js"
-import {player1, player2, winEnemy} from "./game.js";
+import {player1, player2, startGame} from "./game.js";
 
 
 class Selectors {
@@ -18,6 +18,7 @@ class Pokemon extends Selectors {
 
         // console.log(this.name)
         this.img = img;
+        this.selectors = selectors;
         // console.log(this.img)
 
         this.hp = {
@@ -26,7 +27,8 @@ class Pokemon extends Selectors {
         };
 
         this.attacks = attacks;
-        console.log(hp);
+        console.log(this.hp.current);
+        console.log(this.hp.total);
 
         this.renderHP();
     }
@@ -58,11 +60,18 @@ class Pokemon extends Selectors {
 
 
         if (count > (this.hp.current * 100) / this.hp.total) {
+
+            if (this.selectors === player1.selectors){
+                this.disableALlActions();
+                alert(`Вы проиграли! Начнёте снова?`);
+                new startGame();
+            } else {
+                alert(`Вы выиграли! Продолжите?`);
+
+            }
             // this.hp.current = 0;
-            this.disableALlActions();
-            alert(`Персонаж ${this.name} проиграл!`);
+            // this.disableALlActions();
             // start();
-            new winEnemy();
             // console.log(player1);
             // this.renderHP();
 
@@ -72,6 +81,7 @@ class Pokemon extends Selectors {
             } else {
                 this.makeHItLog(player2, player1, damageCount);
             }
+
             this.hp.current -= damageCount;
 
 

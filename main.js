@@ -1,5 +1,5 @@
-import {winEnemy} from "./game.js";
+import {startGame} from "./game.js";
 
 
 
-new winEnemy();
+new startGame();
