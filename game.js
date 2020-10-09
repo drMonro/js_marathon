@@ -48,23 +48,48 @@ class Game {
 
         return function () {
             if (actionCounter < action.maxCount) {
-                if (This.player1.hp.current >= 0) {
-                    This.getDamage(This.player1, random(action2.damageMultiplier));
+                ++actionCounter;
+
+                This.getDamage(This.player2, random(action.damageMultiplier));
+                This.getDamage(This.player1, random(action2.damageMultiplier));
 
 
-                    if(This.player2.hp.current >= 0){
-                        This.getDamage(This.player2, random(action.damageMultiplier));
-
-                    }
-                    ++actionCounter;
-                    This.makeActionLog(actionCounter, action);
-                    This.renderActionLimits(button, action, actionCounter);
-                }
+                This.makeActionLog(actionCounter, action);
+                This.renderActionLimits(button, action, actionCounter);
 
             } else {
                 button.disabled = true;
+
                 This.makeActionLog(actionCounter, action);
             }
+        }
+    };
+
+    getDamage = (player, count) => {
+        const damageCount = Math.ceil((player.hp.total / 100) * count);
+
+        if (count > (player.hp.current * 100) / player.hp.total) {
+            this.disableALlActions();
+
+            if (player.selectors === this.player1.selectors) {
+                alert(`Вы проиграли! Начнёте снова?`);
+
+                this.startGame();
+            } else {
+                this.player2.hp.total = 0;
+                alert(`Вы выиграли! Продолжите бой?`);
+                this.changeEnemy();
+            }
+
+        } else {
+            if (player.selectors === this.player1.selectors) {
+                this.makeHItLog(this.player1, this.player2, damageCount);
+            } else {
+                this.makeHItLog(this.player2, this.player1, damageCount);
+            }
+
+            player.hp.current -= damageCount;
+            this.renderHP(player);
         }
     };
 
@@ -129,33 +154,6 @@ class Game {
         let enemyImage = document.querySelector('.player2').querySelector('img');
         playerImage.src = player.img;
         enemyImage.src = enemy.img;
-    };
-
-    getDamage = (player, count) => {
-        const damageCount = Math.ceil((player.hp.total / 100) * count);
-
-        if (count > (player.hp.current * 100) / player.hp.total) {
-            this.disableALlActions();
-
-            if (player.selectors === this.player1.selectors) {
-                alert(`Вы проиграли! Начнёте снова?`);
-
-                this.startGame();
-            } else {
-                alert(`Вы выиграли! Продолжите бой?`);
-                this.changeEnemy();
-            }
-
-        } else {
-            if (player.selectors === this.player1.selectors) {
-                this.makeHItLog(this.player1, this.player2, damageCount);
-            } else {
-                this.makeHItLog(this.player2, this.player1, damageCount);
-            }
-
-            player.hp.current -= damageCount;
-            this.renderHP(player);
-        }
     };
 
     addCharacter = () => {
