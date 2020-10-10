@@ -6,4 +6,4 @@ function random(num) {
 }
 
 
-export default random;
+export {random};

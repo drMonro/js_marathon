@@ -1,6 +1,6 @@
 import {Pokemon} from "./pokemon.js";
 import {Backend} from "./backend.js";
-import random from "./utils.js";
+import {random} from "./utils.js";
 
 class Game {
     createConsole = () => {
@@ -59,13 +59,13 @@ class Game {
     getDamage = async (action) => {
         const damage = await this.calculateDamage(this.player1.id, this.player2.id, action.id);
 
-        if (damage.kick.player1 >= this.player2.hp.current) {
+        if (damage.kick.player2 >= this.player2.hp.current) {
             this.disableALlActions();
             this.player2.hp.current = 0;
             alert(`Вы выиграли! Продолжите бой?`);
             await this.changeEnemy();
 
-        } else if (damage.kick.player2 >= this.player1.hp.current) {
+        } else if (damage.kick.player1 >= this.player1.hp.current) {
             this.disableALlActions();
             alert(`Вы проиграли! Начнёте снова?`);
             await this.startGame();

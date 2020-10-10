@@ -1,6 +1,13 @@
 import {Game} from "./game.js";
 
-let newGame = new Game();
+class Main {
+    constructor() {
+        this.newGame = new Game();
+    }
 
-newGame.startGame();
+    init = async () => {
+        await this.newGame.startGame();
+    }
+}
 
+new Main().init();
