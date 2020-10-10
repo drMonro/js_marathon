@@ -6,7 +6,7 @@ class Selectors {
 }
 
 class Pokemon extends Selectors {
-    constructor({name, hp, selectors, attacks, img = []}) {
+    constructor({name, hp, selectors, attacks, img, id = []}) {
         super(selectors);
         this.name = name;
         this.img = img;
@@ -16,7 +16,8 @@ class Pokemon extends Selectors {
             total: hp
         };
         this.attacks = attacks;
+        this.id = id;
     }
 }
 
-export default Pokemon;
+export {Pokemon};

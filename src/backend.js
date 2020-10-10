@@ -1,19 +1,18 @@
-import Pokemon from "./pokemon";
-
 class Backend {
-
-
     getPokemons = async () => {
+        const response = await fetch('https://reactmarathon-api.netlify.app/api/pokemons');
+        return await response.json();
+    }
 
-        // const pokemons = await this.getPokemons();
+    getPokemon = async () => {
+        const response = await fetch('https://reactmarathon-api.netlify.app/api/pokemons?random=true');
+        return await response.json();
+    }
 
-        const responce = await fetch('https://reactmarathon-api.netlify.app/api/pokemons');
-        const body = await responce.json();
-        // console.log(body)
-        return body;
+    getDamage = async (idPlayer1, idPlayer2, idAttack) => {
+        const response = await fetch(`https://reactmarathon-api.netlify.app/api/fight?player1id=${idPlayer1}&attackId=${idAttack}&player2id=${idPlayer2}`);
+        return await response.json();
     }
 }
 
-
-// export {Backend};
-export default Backend;
+export {Backend};

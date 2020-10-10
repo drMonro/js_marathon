@@ -1,11 +1,8 @@
-// import {pokemons} from "./pokemons.js";
-import Pokemon from "./pokemon.js";
-import Backend from "./backend.js";
+import {Pokemon} from "./pokemon.js";
+import {Backend} from "./backend.js";
 import random from "./utils.js";
 
 class Game {
-    generateRandomPokemon = (pokemons) => pokemons[random(pokemons.length - 1)];
-
     createConsole = () => {
         const consoleBlock = document.createElement('div');
         const playGround = document.querySelector('html');
@@ -54,7 +51,46 @@ class Game {
         }
     };
 
-    makeAction = (action, button, action2) => {
+    calculateDamage = async (idPlayer1, idPlayer2, idAttack) => {
+        this.backResponse = new Backend();
+        return await this.backResponse.getDamage(idPlayer1, idPlayer2, idAttack);
+    };
+
+    getDamage = async (action) => {
+        const damage = await this.calculateDamage(this.player1.id, this.player2.id, action.id);
+
+        // console.log(damage.kick.player1)
+
+        if (damage.kick.player1 >= this.player2.hp.current) {
+            this.disableALlActions();
+            this.player2.hp.total = 0;
+            alert(`Вы выиграли! Продолжите бой?`);
+            // this.changeEnemy();
+            await this.startGame();
+
+
+        } else if (damage.kick.player2 >= this.player1.hp.current) {
+            alert(`Вы проиграли! Начнёте снова?`);
+            await this.startGame();
+        } else {
+
+            console.log(damage.kick.player1)
+            console.log(damage.kick.player2)
+
+            this.player2.hp.current -= damage.kick.player1;
+            this.player1.hp.current -= damage.kick.player2;
+
+            this.renderHP(this.player1);
+            this.renderHP(this.player2);
+
+            this.makeHItLog(this.player1, this.player2, damage.kick.player1);
+
+            this.makeHItLog(this.player2, this.player1, damage.kick.player2);
+
+        }
+    };
+
+    makeAction = (action, button) => {
         let actionCounter = 0;
         let This = this;
         this.renderActionLimits(button, action, actionCounter);
@@ -62,62 +98,26 @@ class Game {
         return function () {
             if (actionCounter < action.maxCount) {
                 ++actionCounter;
-
-                This.getDamage(This.player2, random(action.damageMultiplier));
-                This.getDamage(This.player1, random(action2.damageMultiplier));
-
-
+                This.getDamage(action);
                 This.makeActionLog(actionCounter, action);
                 This.renderActionLimits(button, action, actionCounter);
-
             } else {
                 button.disabled = true;
-
                 This.makeActionLog(actionCounter, action);
             }
         }
     };
 
-    getDamage = (player, count) => {
-        const damageCount = Math.ceil((player.hp.total / 100) * count);
-
-        if (count > (player.hp.current * 100) / player.hp.total) {
-            this.disableALlActions();
-
-            if (player.selectors === this.player1.selectors) {
-                alert(`Вы проиграли! Начнёте снова?`);
-
-                this.startGame();
-            } else {
-                this.player2.hp.total = 0;
-                alert(`Вы выиграли! Продолжите бой?`);
-                this.changeEnemy();
-            }
-
-        } else {
-            if (player.selectors === this.player1.selectors) {
-                this.makeHItLog(this.player1, this.player2, damageCount);
-            } else {
-                this.makeHItLog(this.player2, this.player1, damageCount);
-            }
-
-            player.hp.current -= damageCount;
-            this.renderHP(player);
-        }
-    };
-
-    setupHitButtons = (attacks1, attacks2) => {
+    setupHitButtons = (attacks1) => {
         const controlBar = document.querySelector('.control');
 
         attacks1.forEach(attack => {
-
             const buttonElement = document.createElement('button');
             buttonElement.classList.add('button');
             buttonElement.innerText = attack.name;
-            const strikeOut = this.makeAction(attack, buttonElement, attacks2);
+            let strikeOut = this.makeAction(attack, buttonElement);
 
-            buttonElement.addEventListener('click', () => {
-                console.log('click');
+            buttonElement.addEventListener('click',() => {
                 strikeOut();
             })
             controlBar.appendChild(buttonElement);
@@ -169,70 +169,47 @@ class Game {
         enemyImage.src = enemy.img;
     };
 
-    addCharacter = () => {
+    addCharacter = async () => {
+        // let character = this.generateRandomPokemon(this.pokemons);
+        let character = await this.getRandomPokemon();
 
-        // const pokemons = await this.getPokemons();
-
-        // let character = this.generateRandomPokemon(pokemons);
-
-
-        // this.player1 = new Pokemon({
-        //     ...character,
-        //     selectors: 'player1'
-        // })
-        // this.attacks1 = this.player1.attacks;
+        this.player1 = new Pokemon({
+            ...character,
+            selectors: 'player1'
+        })
+        this.attacks1 = this.player1.attacks;
+        // console.log(this.attacks1);
     }
 
-    addEnemy = () => {
-
-        // const pokemons = await this.getPokemons();
-
-        // let enemy = this.generateRandomPokemon(pokemons);
-        //
-        // this.player2 = new Pokemon({
-        //     ...enemy,
-        //     selectors: 'player2'
-        // })
-        // // console.log(this.player2);
-        //
-        // this.attacks2 = this.player2.attacks[0];
-        // console.log(this.attacks2);
-
+    addEnemy = async () => {
+        // let enemy = this.generateRandomPokemon(this.pokemons);
+        let enemy = await this.getRandomPokemon();
+        this.player2 = new Pokemon({
+            ...enemy,
+            selectors: 'player2'
+        })
+        this.attacks2 = this.player2.attacks[0];
     }
 
     getPokemons = async () => {
         this.backResponse = new Backend();
-        // console.log(this.backResponse)
-        this.test = await this.backResponse.getPokemons();
-        // console.log(this.test);
-        // this.addEnemy();
-        // this.addCharacter();
-        //
-        // this.createConsole();
-        //
-        // this.resetGame();
+        this.pokemons = await this.backResponse.getPokemons();
     };
 
+    getRandomPokemon = async () => {
+        this.backResponse = new Backend();
+        return await this.backResponse.getPokemon();
+    };
 
     startGame = async () => {
-
-        await this.getPokemons();
-        console.log(this.test)
-        // this.backResponse = new Backend();
-        // // console.log(this.backResponse)
-        // const test =  this.backResponse.getPokemons();
-        // console.log(test);
-        // this.addEnemy();
-        // this.addCharacter();
-        //
-        // this.createConsole();
-        //
-        // this.resetGame();
+        await this.addEnemy();
+        await this.addCharacter();
+        this.createConsole();
+        this.resetGame();
     };
 
     resetGame = () => {
-        console.log(this.player1)
-        this.setupHitButtons(this.attacks1, this.attacks2);
+        this.setupHitButtons(this.attacks1);
         this.renderNames(this.player1, this.player2);
         this.renderHP(this.player1);
         this.renderHP(this.player2);
