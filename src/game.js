@@ -1,9 +1,10 @@
-import {pokemons} from "./pokemons.js";
+// import {pokemons} from "./pokemons.js";
 import Pokemon from "./pokemon.js";
+import Backend from "./backend.js";
 import random from "./utils.js";
 
 class Game {
-    generateRandomPokemon = () => pokemons[random(pokemons.length - 1)];
+    generateRandomPokemon = (pokemons) => pokemons[random(pokemons.length - 1)];
 
     createConsole = () => {
         const consoleBlock = document.createElement('div');
@@ -15,7 +16,7 @@ class Game {
         button.innerText = `${action.name} (${action.maxCount - counter})`;
     };
 
-    makeActionLog(counter, action) {
+    makeActionLog = (counter, action) => {
         const consoleBar = document.getElementById('logs');
         const consoleLog = document.createElement('p');
 
@@ -31,6 +32,7 @@ class Game {
     renderHP = (player) => {
         this.renderHPLabel(player);
         this.renderHPBar(player);
+        this.setHPStatus(player);
     };
 
     renderHPLabel = (player) => {
@@ -39,6 +41,17 @@ class Game {
 
     renderHPBar = (player) => {
         player.elHPBar.style.width = (player.hp.current * 100) / player.hp.total + '%';
+    };
+
+    setHPStatus = (player) => {
+        if (player.hp.current <= 60 && player.hp.current >= 20) {
+            player.elHPBar.classList.add('low');
+        } else if (player.hp.current < 20) {
+            player.elHPBar.classList.add('critical');
+        } else {
+            player.elHPBar.classList.remove('critical');
+            player.elHPBar.classList.remove('low');
+        }
     };
 
     makeAction = (action, button, action2) => {
@@ -157,35 +170,68 @@ class Game {
     };
 
     addCharacter = () => {
-        let character = this.generateRandomPokemon();
 
-        this.player1 = new Pokemon({
-            ...character,
-            selectors: 'player1'
-        })
-        this.attacks1 = this.player1.attacks;
+        // const pokemons = await this.getPokemons();
+
+        // let character = this.generateRandomPokemon(pokemons);
+
+
+        // this.player1 = new Pokemon({
+        //     ...character,
+        //     selectors: 'player1'
+        // })
+        // this.attacks1 = this.player1.attacks;
     }
 
     addEnemy = () => {
-        let enemy = this.generateRandomPokemon();
 
-        this.player2 = new Pokemon({
-            ...enemy,
-            selectors: 'player2'
-        })
-        this.attacks2 = this.player2.attacks[0];
+        // const pokemons = await this.getPokemons();
+
+        // let enemy = this.generateRandomPokemon(pokemons);
+        //
+        // this.player2 = new Pokemon({
+        //     ...enemy,
+        //     selectors: 'player2'
+        // })
+        // // console.log(this.player2);
+        //
+        // this.attacks2 = this.player2.attacks[0];
+        // console.log(this.attacks2);
+
     }
 
-    startGame = () => {
-        this.addEnemy();
-        this.addCharacter();
+    getPokemons = async () => {
+        this.backResponse = new Backend();
+        // console.log(this.backResponse)
+        this.test = await this.backResponse.getPokemons();
+        // console.log(this.test);
+        // this.addEnemy();
+        // this.addCharacter();
+        //
+        // this.createConsole();
+        //
+        // this.resetGame();
+    };
 
-        this.createConsole();
 
-        this.resetGame();
+    startGame = async () => {
+
+        await this.getPokemons();
+        console.log(this.test)
+        // this.backResponse = new Backend();
+        // // console.log(this.backResponse)
+        // const test =  this.backResponse.getPokemons();
+        // console.log(test);
+        // this.addEnemy();
+        // this.addCharacter();
+        //
+        // this.createConsole();
+        //
+        // this.resetGame();
     };
 
     resetGame = () => {
+        console.log(this.player1)
         this.setupHitButtons(this.attacks1, this.attacks2);
         this.renderNames(this.player1, this.player2);
         this.renderHP(this.player1);
