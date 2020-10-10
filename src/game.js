@@ -59,26 +59,19 @@ class Game {
     getDamage = async (action) => {
         const damage = await this.calculateDamage(this.player1.id, this.player2.id, action.id);
 
-        // console.log(damage.kick.player1)
-
         if (damage.kick.player1 >= this.player2.hp.current) {
             this.disableALlActions();
-            this.player2.hp.total = 0;
+            this.player2.hp.current = 0;
             alert(`Вы выиграли! Продолжите бой?`);
-            // this.changeEnemy();
-            await this.startGame();
-
+            await this.changeEnemy();
 
         } else if (damage.kick.player2 >= this.player1.hp.current) {
+            this.disableALlActions();
             alert(`Вы проиграли! Начнёте снова?`);
             await this.startGame();
         } else {
-
-            console.log(damage.kick.player1)
-            console.log(damage.kick.player2)
-
-            this.player2.hp.current -= damage.kick.player1;
-            this.player1.hp.current -= damage.kick.player2;
+            this.player2.hp.current -= damage.kick.player2;
+            this.player1.hp.current -= damage.kick.player1;
 
             this.renderHP(this.player1);
             this.renderHP(this.player2);
@@ -216,8 +209,8 @@ class Game {
         this.renderAvatars(this.player1, this.player2);
     };
 
-    changeEnemy = () => {
-        this.addEnemy();
+    changeEnemy = async () => {
+        await this.addEnemy();
         this.resetGame();
     };
 
